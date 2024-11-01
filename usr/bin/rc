@@ -112,8 +112,8 @@ status() {
 
 #-------------- print help function -------------------------
 help() {
-    echo "
-            ** rc usage:
+    printf "
+            $BLUE**$GREEN rc usage$RESET:$BWHITE
             rc add [init.d script name] - add service on boot
             rc del [init.d script name] - delete service from boot
             rc start [init.d script name] - start service
@@ -123,15 +123,14 @@ help() {
             rc bootlist - list enabled services
             rc status [init.d script name] - check service status
 
-            examples:
+            $BLUE**$GREEN examples$RESET:$BWHITE
             rc add httpd
             rc del httpd  
             rc start httpd
             rc stop httpd
             rc restart httpd
             rc list
-            rc bootlist
-        "
+            rc bootlist\n$RESET"
 }
 #------------------------------------------------------------
 

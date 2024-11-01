@@ -11,18 +11,18 @@
 ##         ##          ##
 ##         ##          ##
 
-#----- colors -------
-. /usr/lib/init/colors.sh
-#--------------------
-
 #---------------- variables --------------------------
-rootdir=/
+rootdir=$(pwd)
 repofile=$rootdir/etc/pm/repo
 packagesqueryfile=$rootdir/usr/share/pm/query
 reposquerydir=$rootdir/usr/share/pm/repos
 cachedpkgdir=$rootdir/var/cache/pm/pkg
 installedpackagesdir=$rootdir/usr/share/pm/packages
 #-----------------------------------------------------
+
+#----- colors -------
+. $rootdir/usr/lib/init/colors.sh
+#--------------------
 
 #---------------- check root priveleges function ------------------------
 checkroot() {
