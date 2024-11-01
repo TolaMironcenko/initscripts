@@ -1,0 +1,29 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+case "$1" in
+    start)
+        printf "$BBLUE**$BYELLOW Starting httpd\n$RESET"
+        /usr/bin/httpd -h /srv/www
+        check $? "start httpd"
+        echo $(pgrep httpd) > /var/run/httpd.pid
+        ;;
+    stop)
+        printf "$BBLUE**$BYELLOW Stopping httpd\n$RESET"
+        kill $(cat /var/run/httpd.pid)
+        check $? "stop httpd"
+        rm /var/run/httpd.pid
+        ;;
+    restart|reload)
+        restart
+        ;;
+    *)
+        help
+		return 1
+        ;;
+esac
+return $?

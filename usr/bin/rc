@@ -1,0 +1,168 @@
+#!/bin/sh
+
+########## ##########
+########## ##########
+##      ## ##
+##         ##
+##         ##         - RC BOOT SCRIPTS MANAGER FOR SIMPLE LINUX 
+##         ##         - AUTHOR -- TOLA MIRONCENKO
+##         ##
+##         ##
+##         ##########
+##         ##########
+
+rootdir=$(pwd)
+
+#----- colors -------
+. $rootdir/usr/lib/init/colors.sh
+#--------------------
+
+#------------------------ add to boot function --------------
+add() {
+    resultlink=$(cat $rootdir/usr/share/rc/orders | grep $1)
+    if [ -f $rootdir/usr/lib/init/services/$1.service ] && [ $resultlink ]; then
+        cd $rootdir/etc/rc.d 
+        ln -sv $rootdir/usr/lib/init/services/$1.service "$resultlink" &> /dev/null
+        printf "$BLUE**$GREEN SUCCESS:$BWHITE added $1 to init.\n$RESET"
+    else
+        help
+    fi
+}
+#------------------------------------------------------------
+
+#--------------------- del from boot function ---------------
+del() {
+    filetoremove=$(find $rootdir/etc/rc.d/ | grep $1 )
+    if [ $filetoremove ]; then
+        rm -v $filetoremove &> /dev/null
+        printf "$BLUE**$GREEN SUCCESS:$BWHITE removed $1 from init.\n$RESET"
+    else
+        help
+    fi
+}
+#------------------------------------------------------------
+
+#---------------------- start daemon function ---------------
+start() {
+    if [ -f $rootdir/etc/init.d/$1 ]; then
+        $rootdir/etc/init.d/$1 start
+    else
+        help
+    fi
+}
+#------------------------------------------------------------
+
+#---------------- stop daemon function ----------------------
+stop() {
+    if [ -f $rootdir/etc/init.d/$1 ]; then
+        $rootdir/etc/init.d/$1 stop
+    else
+        help
+    fi
+}
+#------------------------------------------------------------
+
+#------------- restart daemon function ----------------------
+restart() {
+    if [ -f $rootdir/etc/init.d/$1 ]; then
+        $rootdir/etc/init.d/$1 restart
+    else
+        help
+    fi
+}
+#------------------------------------------------------------
+
+#------------------ list services ---------------------------
+list() {
+    ls --color $rootdir/usr/lib/init/services
+}
+#------------------------------------------------------------
+
+#------------------ list enabled services -------------------
+bootlist() {
+    ls --color $rootdir/etc/rc.d
+}
+#------------------------------------------------------------
+
+#------------------ service status --------------------------
+status() {
+    if [[ "$1" == "" ]]; then
+        help
+        exit 0
+    fi
+    if [[ "$(ls $rootdir/etc/init.d | grep $1)" == ""  ]]; then
+        printf "$YELLOW**$BRED error:$RESET can't find service /etc/init.d/$1\n"
+        exit 1
+    fi
+    printf "$YELLOW**$GREEN $1$RESET\n"
+    rcdservice=$(ls $rootdir/etc/rc.d | grep $1 2> /dev/null)
+    if [[ "$rcdservice" == "" ]]; then
+        printf "Loaded:$YELLOW unloaded$RESET (/etc/rc.d)\n"
+    else
+        printf "Loaded:$GREEN loaded$RESET (/etc/rc.d/$rcdservice)\n"
+    fi
+    servicepid=$(ls $rootdir/var/run | grep $1)
+    if [[ "$servicepid" == "" ]]; then
+        printf "Active: deactive (${YELLOW}deactive$RESET)\n"
+    else
+        printf "Active: active (${GREEN}running$RESET); pid (/var/run/$servicepid)\n"
+    fi
+}
+#------------------------------------------------------------
+
+#-------------- print help function -------------------------
+help() {
+    echo "
+            ** rc usage:
+            rc add [init.d script name] - add service on boot
+            rc del [init.d script name] - delete service from boot
+            rc start [init.d script name] - start service
+            rc stop [init.d script name] - stop service
+            rc restart [init.d script name] - restart service
+            rc list - list all services
+            rc bootlist - list enabled services
+            rc status [init.d script name] - check service status
+
+            examples:
+            rc add httpd
+            rc del httpd  
+            rc start httpd
+            rc stop httpd
+            rc restart httpd
+            rc list
+            rc bootlist
+        "
+}
+#------------------------------------------------------------
+
+command="$1"
+
+case ${command} in
+    add)
+        add $2 $3
+        ;;
+    del)
+        del $2
+        ;;
+    start)
+        start $2
+        ;;
+    stop)
+        stop $2
+        ;;
+    restart)
+        restart $2
+        ;;
+    list)
+        list
+        ;;
+    bootlist)
+        bootlist
+        ;;
+    status)
+        status $2
+        ;;
+    *)
+        help
+        ;;
+esac

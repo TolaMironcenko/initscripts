@@ -1,0 +1,27 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+case "$1" in
+    start)
+        printf "$BBLUE**$BYELLOW Starting klogd\n$RESET"
+        /usr/bin/klogd
+        check $? "start klogd"
+        ;;
+    stop)
+        printf "$BBLUE**$BYELLOW Stopping klogd\n$RESET"
+        kill $(cat /var/run/klogd.pid)
+        check $? "stop klogd"
+        rm /var/run/klogd.pid &> /dev/null
+        ;;
+    restart|reload)
+        restart
+        ;;
+    *)
+        help
+        ;;
+esac
+reurn $?

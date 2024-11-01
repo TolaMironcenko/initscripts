@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+case "$1" in 
+    start)
+        printf "$BBLUE**$BYELLOW Setting up hostname\n$RESET"
+        /usr/bin/hosname -F /etc/hostname
+        check $? "Set up hostname"
+        ;;
+    stop)
+        ;;
+    restart|reload)
+        ;;
+    *)
+        help
+        return 1
+esac
+return $?

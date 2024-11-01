@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+case "$1" in
+    start)
+        printf "$BBLUE**$BYELLOW Starting ftpd\n$RESET"
+        tcpsvd -vE 0.0.0.0 21 ftpd -w -S -A /srv/ftpd &>/dev/null &
+        check $? "start ftpd"
+        echo $(pgrep tcpsvd) > /ar/run/ftpd.pid
+        ;;
+    stop)
+        printf "$BBLUE**$BYELLOW Stopping ftpd\n$RESET"
+        kill $(cat /var/run/ftpd.pid)
+        check $? "stop ftpd"
+        rm /var/run/ftpd.pid
+        ;;
+    restart|reload)
+        restart
+        ;;
+    *)
+        help
+		return 1
+esac
+return $?

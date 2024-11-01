@@ -1,0 +1,27 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+case "$1" in
+    start)
+        printf "$BBLUE**$BYELLOW Starting dnsmasq\n$RESET"
+        /usr/bin/dnsmasq --user=dnsmasq --pid-file=/var/run/dnsmasq.pid
+        check $? "start dnsmasq"
+        ;;
+    stop)
+        printf "$BBLUE**$BYELLOW Stopping dnsmasq\n$RESET"
+        kill $(cat /var/run/dnsmasq.pid)
+        check $? "stop dnsmasq"
+        rm /var/run/dnsmasq.pid &> /dev/null
+        ;;
+    restart|reload)
+        restart
+        ;;
+    *)
+        help
+        ;;    
+esac
+return $?

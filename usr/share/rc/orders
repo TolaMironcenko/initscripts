@@ -1,0 +1,16 @@
+01hostname
+02klogd
+03syslogd
+04swap
+05networking
+06sysctl
+07dnsmasq
+08dnsd
+09telnetd
+10ssh
+11iptables
+12openrouterinit
+13ftpd
+14hostapd
+15httpd
+16nginx
