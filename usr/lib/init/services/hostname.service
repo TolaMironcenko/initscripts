@@ -7,7 +7,7 @@
 
 start() {
     notify "Settin up hostname"
-    /usr/bin/hosname -F /etc/hostname
+    /usr/bin/hostname -F /etc/hostname
     check $? "Set up hostname"
     return $?
 }

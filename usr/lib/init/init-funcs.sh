@@ -63,6 +63,6 @@ check() {
 
 #--- notify func ---
 notify() {
-    printf "$BBLUE**$BYELLOW $1\n$RESET"
+    printf "$BBLUE**$BGREEN $1\n$RESET"
 }
 #-------------------

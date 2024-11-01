@@ -7,7 +7,7 @@
 
 start() {
     notify "Setting up sysctl"
-    sysctl -p & /dev/null
+    sysctl -p &> /dev/null
     check $? "setting up sysctl"
     return $?
 }

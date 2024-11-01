@@ -7,12 +7,12 @@
 
 start() {
     notify "Starting openrouter software"
-    /usr/bin/auth_service &>/dev/null
+    /usr/bin/auth_service &>/dev/null &
     check $? "start auth_service"
-    echo $(pgrep auth_service) > /var/run/auth_service.pid
-    /usr/bin/openrouter &> /dev/null
+    echo $! > /var/run/auth_service.pid
+    /usr/bin/openrouter &> /dev/null &
     check $? "start openrouter"
-    echo $(pgrep openrouter) > /var/run/openrouter.pid
+    echo $! > /var/run/openrouter.pid
     return $?
 }
 

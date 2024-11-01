@@ -9,7 +9,7 @@ start() {
     notify "Starting ftpd"
     tcpsvd -vE 0.0.0.0 21 ftpd -w -S -A /srv/ftpd &>/dev/null &
     check $? "start ftpd"
-    echo $(pgrep tcpsvd) > /ar/run/ftpd.pid
+    echo $(pgrep tcpsvd) > /var/run/ftpd.pid
     return $?
 }
 

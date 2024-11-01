@@ -9,7 +9,7 @@ start() {
     notify "Starting sshd"
     /usr/bin/sshd -D &
     check $? "start sshd"
-    echo $(pgrep sshd) > /var/run/sshd.pid
+    echo $! > /var/run/sshd.pid
     return $?
 }
 

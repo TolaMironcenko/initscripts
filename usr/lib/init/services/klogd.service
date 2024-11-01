@@ -28,4 +28,4 @@ case "$1" in
         help
         ;;
 esac
-reurn $?
+return $?

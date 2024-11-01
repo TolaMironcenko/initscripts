@@ -9,13 +9,13 @@ start() {
     notify "Starting telnetd"
     /usr/bin/telnetd -p 23
     check $? "start telnetd"
-    echo $(gprep telnetd) > /var/run/telnetd.pid
+    echo $(pgrep telnetd) > /var/run/telnetd.pid
     return $?
 }
 
 stop() {
     notify "Stopping telnetd"
-    kill $(cat /var/run/telnetd.pid)
+    kill $(cat /var/run/telnetd.pid | awk '{ print $2 }')
     check $? "stop telnetd"
     rm /var/run/telnetd.pid &> /dev/null
     return $?
