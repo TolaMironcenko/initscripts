@@ -13,6 +13,7 @@ start() {
     /usr/bin/openrouter &> /dev/null &
     check $? "start openrouter"
     echo $! > /var/run/openrouter.pid
+    echo "" > /var/run/openrouterinit.pid
     return $?
 }
 
@@ -22,7 +23,7 @@ stop() {
     check $? "stop auth_service"
     kill $(cat /var/run/openrouter.pid)
     check $? "stop openrouter"
-    rm /var/run/{auth_service.pid,openrouter.pid} &> /dev/null
+    rm /var/run/auth_service.pid /var/run/openrouter.pid /var/run/openrouterinit.pid &> /dev/null
     return $?
 }
 
