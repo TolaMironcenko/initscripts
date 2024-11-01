@@ -5,20 +5,24 @@
 . /usr/lib/init/init-funcs.sh
 #------------------------------------
 
+start() {
+    notify "Starting syslogd"
+    /usr/bin/syslogd
+    check $? "start syslogd"
+    return $?
+}
+
+stop() {
+    notify "Stopping syslogd"
+    kill $(cat /var/run/syslogd.pid)
+    check $? "stop syslogd"
+    rm /var/run/syslogd.pid &> /dev/null
+    return $?
+}
+
 case "$1" in
-    start)
-        printf "$BBLUE**$BYELLOW Starting syslogd\n$RESET"
-        /usr/bin/syslogd
-        check $? "start syslogd"
-        ;;
-    stop)
-        printf "$BBLUE**$BYELLOW Stopping syslogd\n$RESET"
-        kill $(cat /var/run/syslogd.pid)
-        check $? "stop syslogd"
-        rm /var/run/syslogd.pid &> /dev/null
-        ;;
-    restart|reload)
-        restart
+    start|stop|restart|reload|help)
+        "$1"
         ;;
     *)
         help

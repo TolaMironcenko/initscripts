@@ -6,18 +6,14 @@
 #------------------------------------
 
 start() {
-    notify "Starting klogd"
-    /usr/bin/klogd
-    check $? "start klogd"
+    notify "Setting up sysctl"
+    sysctl -p & /dev/null
+    check $? "setting up sysctl"
     return $?
 }
 
 stop() {
-    notify "Stopping klogd"
-    kill $(cat /var/run/klogd.pid)
-    check $? "stop klogd"
-    rm /var/run/klogd.pid &> /dev/null
-    return $?
+    return
 }
 
 case "$1" in
@@ -28,4 +24,4 @@ case "$1" in
         help
         ;;
 esac
-reurn $?
+return $?

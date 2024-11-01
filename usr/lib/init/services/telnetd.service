@@ -5,21 +5,25 @@
 . /usr/lib/init/init-funcs.sh
 #------------------------------------
 
+start() {
+    notify "Starting telnetd"
+    /usr/bin/telnetd -p 23
+    check $? "start telnetd"
+    echo $(gprep telnetd) > /var/run/telnetd.pid
+    return $?
+}
+
+stop() {
+    notify "Stopping telnetd"
+    kill $(cat /var/run/telnetd.pid)
+    check $? "stop telnetd"
+    rm /var/run/telnetd.pid &> /dev/null
+    return $?
+}
+
 case "$1" in
-    start)
-        printf "$BBLUE**$BYELLOW Starting telnetd\n$RESET"
-        /usr/bin/telnetd -p 23
-        check $? "start telnetd"
-        echo $(gprep telnetd) > /var/run/telnetd.pid
-        ;;
-    stop)
-        printf "$BBLUE**$BYELLOW Stopping telnetd\n$RESET"
-        kill $(cat /var/run/telnetd.pid)
-        check $? "stop telnetd"
-        rm /var/run/telnetd.pid &> /dev/null
-        ;;
-    restart|reload)
-        restart
+    start|stop|restart|reload|help)
+        "$1"
         ;;
     *)
         help

@@ -1,0 +1,40 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+DAEMON="iptables"
+IPTABLES_ARGS=""
+
+start() {
+    notify "Starting $DAEMON"
+    iptables-restore /etc/iptables.conf
+    check $? "start $DAEMON"
+    return $?
+}
+
+stop () {
+    notify "Stopping $DAEMON"
+    iptables -F
+    check $? "stop $DAEMON"
+    return $?
+}
+
+save() {
+    notify "Saving %s: $DAEMON"
+    iptables-save -f /etc/iptables.conf
+    check $? "saving %s: $DAEMON"
+    return $?
+}
+
+case "$1" in
+    start|stop|restart|reload|save|help)
+        "$1"
+        ;;
+    *)
+        help
+        ;;
+esac
+return $?

@@ -6,17 +6,18 @@
 #------------------------------------
 
 start() {
-    notify "Starting klogd"
-    /usr/bin/klogd
-    check $? "start klogd"
+    notify "Starting sshd"
+    /usr/bin/sshd -D &
+    check $? "start sshd"
+    echo $(pgrep sshd) > /var/run/sshd.pid
     return $?
 }
 
 stop() {
-    notify "Stopping klogd"
-    kill $(cat /var/run/klogd.pid)
-    check $? "stop klogd"
-    rm /var/run/klogd.pid &> /dev/null
+    notify "Stopping sshd"
+    kill $(cat /var/run/sshd.pid)
+    check $? "stop sshd"
+    rm /var/run/sshd.pid &> /dev/null
     return $?
 }
 
@@ -28,4 +29,4 @@ case "$1" in
         help
         ;;
 esac
-reurn $?
+return $?

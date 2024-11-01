@@ -5,21 +5,25 @@
 . /usr/lib/init/init-funcs.sh
 #------------------------------------
 
+start() {
+    notify "Starting ftpd"
+    tcpsvd -vE 0.0.0.0 21 ftpd -w -S -A /srv/ftpd &>/dev/null &
+    check $? "start ftpd"
+    echo $(pgrep tcpsvd) > /ar/run/ftpd.pid
+    return $?
+}
+
+stop() {
+    notify "Stopping ftpd"
+    kill $(cat /var/run/ftpd.pid)
+    check $? "stop ftpd"
+    rm /var/run/ftpd.pid &> /dev/null
+    return $?
+}
+
 case "$1" in
-    start)
-        printf "$BBLUE**$BYELLOW Starting ftpd\n$RESET"
-        tcpsvd -vE 0.0.0.0 21 ftpd -w -S -A /srv/ftpd &>/dev/null &
-        check $? "start ftpd"
-        echo $(pgrep tcpsvd) > /ar/run/ftpd.pid
-        ;;
-    stop)
-        printf "$BBLUE**$BYELLOW Stopping ftpd\n$RESET"
-        kill $(cat /var/run/ftpd.pid)
-        check $? "stop ftpd"
-        rm /var/run/ftpd.pid
-        ;;
-    restart|reload)
-        restart
+    start|stop|restart|reload|help)
+        "$1"
         ;;
     *)
         help

@@ -6,26 +6,27 @@
 #------------------------------------
 
 start() {
-    notify "Starting klogd"
-    /usr/bin/klogd
-    check $? "start klogd"
+    notify "Starting nginx"
+    nginx
+    check $? "start nginx"
+    echo $(pgrep nginx) > /var/run/nginx.pid
     return $?
 }
 
 stop() {
-    notify "Stopping klogd"
-    kill $(cat /var/run/klogd.pid)
-    check $? "stop klogd"
-    rm /var/run/klogd.pid &> /dev/null
+    notify "Stopping nginx"
+    nginx -s stop
+    check $? "stop nginx"
+    rm /var/run/nginx.pid &> /dev/null
     return $?
 }
 
 case "$1" in
-    start|stop|restart|reload|help)
+    start|stop|restart|reload)
         "$1"
         ;;
     *)
         help
         ;;
 esac
-reurn $?
+return $?

@@ -5,20 +5,24 @@
 . /usr/lib/init/init-funcs.sh
 #------------------------------------
 
+start() {
+    notify "Starting dnsmasq"
+    /usr/bin/dnsmasq --user=dnsmasq --pid-file=/var/run/dnsmasq.pid
+    check $? "start dnsmasq"
+    return $?
+}
+
+stop() {
+    notify "Stopping dnsmasq"
+    kill $(cat /var/run/dnsmasq.pid)
+    check $? "stop dnsmasq"
+    rm /var/run/dnsmasq.pid &> /dev/null
+    return $?
+}
+
 case "$1" in
-    start)
-        printf "$BBLUE**$BYELLOW Starting dnsmasq\n$RESET"
-        /usr/bin/dnsmasq --user=dnsmasq --pid-file=/var/run/dnsmasq.pid
-        check $? "start dnsmasq"
-        ;;
-    stop)
-        printf "$BBLUE**$BYELLOW Stopping dnsmasq\n$RESET"
-        kill $(cat /var/run/dnsmasq.pid)
-        check $? "stop dnsmasq"
-        rm /var/run/dnsmasq.pid &> /dev/null
-        ;;
-    restart|reload)
-        restart
+    start|stop|restart|reload|help)
+        "$1"
         ;;
     *)
         help

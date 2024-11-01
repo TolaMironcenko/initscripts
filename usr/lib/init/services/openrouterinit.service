@@ -1,0 +1,37 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+start() {
+    notify "Starting openrouter software"
+    /usr/bin/auth_service &>/dev/null
+    check $? "start auth_service"
+    echo $(pgrep auth_service) > /var/run/auth_service.pid
+    /usr/bin/openrouter &> /dev/null
+    check $? "start openrouter"
+    echo $(pgrep openrouter) > /var/run/openrouter.pid
+    return $?
+}
+
+stop() {
+    notify "Stopping openrouter software"
+    kill $(cat /var/run/auth_service.pid)
+    check $? "stop auth_service"
+    kill $(cat /var/run/openrouter.pid)
+    check $? "stop openrouter"
+    rm /var/run/{auth_service.pid,openrouter.pid} &> /dev/null
+    return $?
+}
+
+case "$1" in
+    start|stop|restart|reload|help)
+        "$1"
+        ;;
+    *)
+        help
+        ;;
+esac
+return $?

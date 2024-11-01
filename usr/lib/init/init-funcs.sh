@@ -35,13 +35,19 @@ rc() {
 #--- restart function ---
 restart() {
     $0 stop
+    sleep 1
     $0 start
+}
+
+reload() {
+    restart
 }
 #------------------------
 
 #--- help function ---
 help() {
-    echo "$0 init script usage: $0 {start|stop|restart|reload}"
+    echo "$0 init script usage: $0 {start|stop|restart|reload|help}"
+    exit 1
 }
 #---------------------
 
@@ -54,3 +60,9 @@ check() {
     printf "$BBLUE**$BGREEN SUCCESS: $2\n$RESET"
 }
 #-----------------------------------------------
+
+#--- notify func ---
+notify() {
+    printf "$BBLUE**$BYELLOW $1\n$RESET"
+}
+#-------------------

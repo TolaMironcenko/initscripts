@@ -5,21 +5,25 @@
 . /usr/lib/init/init-funcs.sh
 #------------------------------------
 
+start() {
+    notify "Starting dnsd"
+    /usr/bin/dnsd -d -c /etc/dnsd.conf
+    check $? "start dnsd"
+    echo $(pgrep dnsd) > /var/run/dnsd.pid
+    return $?
+}
+
+stop() {
+    notify "Stopping dnsd"
+    kill $(cat /var/run/dnsd.pid)
+    check $? "stop dnsd"
+    rm /var/run/dnsd.pid &> /dev/null
+    return $?
+}
+
 case "$1" in
-    start)
-        printf "$BBLUE**$BYELLOW Starting dnsd\n$RESET"
-        /usr/bin/dnsd -d -c /etc/dnsd.conf
-        check $? "start dnsd"
-        echo $(pgrep dnsd) > /var/run/dnsd.pid
-        ;;
-    stop)
-        printf "$BBLUE**$BYELLOW Stopping dnsd\n$RESET"
-        kill $(cat /var/run/dnsd.pid)
-        check $? "stop dnsd"
-        rm /var/run/dnsd.pid
-        ;;
-    restart|reload)
-        restart
+    start|stop|restart|reload|help)
+        "$1"
         ;;
     *)
         help

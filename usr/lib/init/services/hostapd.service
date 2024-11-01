@@ -1,0 +1,40 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+start() {
+    notify "Starting hostapd"
+    if [ "$2" = "" ]; then
+        /usr/bin/hostapd -P /var/run/hostapd.pid /etc/hostapd/hostapd
+        check $? "start hostapd"
+    else
+        /usr/bin/hostapd -P /var/run/hostapd.pid $2
+        check $? "start hostapd"
+    fi
+    return $?
+}
+
+stop() {
+    notify "Stopping hostapd"
+    if [ ! -f /var/run/hostapd.pid ]; then
+        notify "$RESET[$RED Dnsmasq is not running $RESET]"
+        exit 1
+    fi
+    kill $(cat /var/run/hostapd.pid)
+    check $? "stop hostapd"
+    rm /var/run/hostapd.pid &> /dev/null
+    return $?
+}
+
+case "$1" in
+    start|stop|restart|reload|help)
+        "$1"
+        ;;
+    *)
+        help
+        ;;
+esac
+return $?

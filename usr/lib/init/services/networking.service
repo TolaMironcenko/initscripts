@@ -5,23 +5,25 @@
 . /usr/lib/init/init-funcs.sh
 #------------------------------------
 
+start() {
+    notify "Starting networking"
+    /usr/bin/ifup -a
+    check $? "networking"
+    echo $! > /var/run/networking.pid
+    return $?
+}
+
+stop() {
+    notify "Stopping networking"
+    /usr/bin/ifdown -a
+    check $? "Stop networking"
+    rm /var/run/networking.pid &> /dev/null
+    return $?
+}
+
 case "$1" in
-    start)
-        printf "$BBLUE**$BYELLOW Starting networking\n$RESET"
-        /usr/bin/ifup -a
-        check $? "networking"
-        echo $! > /var/run/networking.pid
-        ;;
-    stop)
-        printf "$BBLUE**$BYELLOW Stopping netowrking\n$RESET"
-        /usr/bin/ifdown -a
-        check $? "Stop networking"
-        if [ -f /var/run/neworking.pid ]; then
-            rm /var/run/networking.pid
-        fi
-        ;;
-    restart|reload)
-        restart
+    start|stop|restart|reload|help)
+        "$1"
         ;;
     *)
         help
