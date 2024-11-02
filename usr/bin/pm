@@ -12,7 +12,7 @@
 ##         ##          ##
 
 #---------------- variables --------------------------
-rootdir=$(pwd)
+rootdir=/
 repofile=$rootdir/etc/pm/repo
 packagesqueryfile=$rootdir/usr/share/pm/query
 reposquerydir=$rootdir/usr/share/pm/repos
@@ -245,22 +245,22 @@ clear() {
 #------------------------------------------------------------------------
 
 case "$1" in 
-    add)
+    add|a|-a)
         add $*
         ;;
-    down)
+    down|download)
         down $2
         ;;
-    unpack)
+    unpack|u|-u)
         unpack $2
         ;;
-    del)
+    del|d|-d)
         del $*
         ;;
-    list)
+    list|l|-l)
         list $2
         ;;
-    query)
+    query|q|-q)
         query
         ;;
     help)

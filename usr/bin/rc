@@ -11,7 +11,7 @@
 ##         ##########
 ##         ##########
 
-rootdir=$(pwd)
+rootdir=/
 
 #----- colors -------
 . $rootdir/usr/lib/init/colors.sh

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#--- import colors ---
+. /usr/lib/init/colors.sh
+#---------------------
+
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/.local/bin
+
+export PS1="$BGREEN** \u@\h: \$(date +%d.%m.%Y) \t\n\w \\\$ $RESET"
+[ $(id -u) -eq 0 ] && export PS1="$BRED** \u@\h: \$(date +%d.%m.%Y) \t\n\w \\\$ $RESET"
+
+#--- sys ---
+alias psa='busybox ps'          # show all processes
+alias c='clear'                 # clear terminal screen
+alias e='echo'                  # print in terminal
+alias s='source'                # source
+alias una='uname -a'            # system name
+alias ifcnf='ifconfig'          # ifconfig
+alias ipr='ip route'            # show routes
+alias ipa='ip addr'             # show addresses
+alias ipl='ip link'             # show links
+alias ll='ls -lh'               # show list files with information
+alias la='ls -a'
+alias l='ls -alh'
+#-----------

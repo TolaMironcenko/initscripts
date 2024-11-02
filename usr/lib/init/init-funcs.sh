@@ -54,15 +54,15 @@ help() {
 #------------ check status function ------------
 check() {
     if [ $1 -ne 0 ]; then
-        printf "$BBLUE**$BRED ERROR: $2\n$RESET"
+        printf "$BBLUE**$BWHITE $2 [$BRED ERROR $RESET]\n$RESET"
         return
     fi
-    printf "$BBLUE**$BGREEN SUCCESS: $2\n$RESET"
+    printf "$BBLUE**$BWHITE $2 [$BGREEN SUCCESS $RESET]\n$RESET"
 }
 #-----------------------------------------------
 
 #--- notify func ---
 notify() {
-    printf "$BBLUE**$BGREEN $1\n$RESET"
+    printf "$BBLUE**$BWHITE $1\n$RESET"
 }
 #-------------------

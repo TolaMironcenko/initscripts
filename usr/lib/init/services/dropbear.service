@@ -1,0 +1,38 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+. /etc/default/dropbear
+
+ENABLE_ROOT_LOGIN_ARGS=""
+
+if [ "$ENABLE_ROOT_LOGIN" = "no" ]; then
+    ENABLE_ROOT_LOGIN_ARGS="-w -g"
+fi
+
+start() {
+    notify "Starting dropbear"
+    /usr/bin/dropbear -P /var/run/dropbear.pid $DROPBEAR_EXTRA_ARGS $ENABLE_ROOT_LOGIN_ARGS -p $DROPBEAR_PORT &> /var/log/dropbear.log
+    check $? "start dropbear"
+    return $?
+}
+
+stop() {
+    notify "Stopping dropbear"
+    kill $(cat /var/run/dropbear.pid)
+    check $? "stop dropbear"
+    return $?
+}
+
+case "$1" in
+    start|stop|restart|reload|help)
+        "$1"
+        ;;
+    *)
+        help
+        ;;
+esac
+return $?
