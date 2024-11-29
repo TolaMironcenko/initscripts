@@ -1,7 +1,10 @@
+::sysinit:mkdir /dev/shm
+::sysinit:mount -a
 ::sysinit:/etc/init.d/rcS
 
 ::ctrlaltdel:/sbin/reboot
 ::shutdown:/etc/init.d/rcK
+::shutdown:umount -a -r
 
 tty1::respawn:/usr/bin/getty 38400 tty1
 tty2::respawn:/usr/bin/getty 38400 tty2
