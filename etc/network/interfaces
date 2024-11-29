@@ -4,8 +4,8 @@ iface lo inet loopback
 #--------------------------
 
 #--- eth0 connected to the internet dhcp ---
-# auto eth0
-# iface eth0 inet dhcp
+auto eth0
+iface eth0 inet dhcp
 #-------------------------------------------
 
 #--- eth0 connected to the internet static ---
