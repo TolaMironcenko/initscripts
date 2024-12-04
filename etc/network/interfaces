@@ -4,13 +4,13 @@ iface lo inet loopback
 #--------------------------
 
 #--- eth0 connected to the internet dhcp ---
-auto eth0
-iface eth0 inet dhcp
+# auto eth0
+# iface eth0 inet dhcp
 #-------------------------------------------
 
 #--- eth0 connected to the internet static ---
-# auto eth0
-# iface eth0 inet static
-#     address 192.168.200.1
-#     netmask 255.255.255.0
+auto eth0
+iface eth0 inet static
+    address 192.168.200.1
+    netmask 255.255.255.0
 #---------------------------------------------
