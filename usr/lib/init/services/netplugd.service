@@ -1,0 +1,32 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+start() {
+    notify "Starting Netplugd"
+    netplugd -p /var/run/netplugd.pid
+    check $? "start netplugd"
+    return $?
+}
+
+stop() {
+    notify "Stopping Netplugd"
+    kill $(cat /var/run/netplugd.pid)
+    check $? "stop Netplugd"
+    rm /var/run/netplugd.pid &> /dev/null
+    return $?
+}
+
+case "$1" in
+    start|stop|restart|reload|help)
+        "$1"
+        ;;
+    *)
+        help
+        ;;
+esac
+return $?
+
