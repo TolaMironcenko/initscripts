@@ -22,4 +22,6 @@ alias ipl='ip link'             # show links
 alias ll='ls -lh'               # show list files with information
 alias la='ls -a'
 alias l='ls -alh'
+alias df='df -h'
+alias free='free -h'
 #-----------
