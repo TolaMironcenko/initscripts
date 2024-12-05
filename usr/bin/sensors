@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ ! -d /sys/class/thermal ]; then
+	echo ERROR: no thermal interfaces
+	exit 1
+fi
+
+for interface in $(ls /sys/class/thermal/ | grep thermal_zone); do
+	echo $interface: $(($(cat /sys/class/thermal/$interface/temp)/1000))C
+done
+
