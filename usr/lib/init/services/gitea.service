@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#--- import colors and init-funcs ---
+. /usr/lib/init/colors.sh
+. /usr/lib/init/init-funcs.sh
+#------------------------------------
+
+start() {
+    otify "Starting gitea"
+    su gitea -c "/usr/bin/gitea -w /home/gitea"
+    check $? "start gitea"
+    echo $(pgrep gitea) > /var/run/gitea.pid
+    return $?
+}
+
+stop() {
+    notify "Stopping gitea"
+    kill $(cat /var/run/gitea.pid)
+    check $? "stop gitea"
+    rm /var/run/gitea.pid &> /dev/null
+    return $?
+}
+
+case "$1" in
+    start|stop|restart|reload|help)
+        "$1"
+        ;;
+    *)
+        help
+		return 1
+        ;;
+esac
+return $?
