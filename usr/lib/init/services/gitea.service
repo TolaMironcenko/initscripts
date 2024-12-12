@@ -6,8 +6,8 @@
 #------------------------------------
 
 start() {
-    otify "Starting gitea"
-    su gitea -c "/usr/bin/gitea -w /home/gitea" &
+    notify "Starting gitea"
+    su gitea -c "/usr/bin/gitea -w /home/gitea" &> /var/log/gitea.log &
     check $? "start gitea"
     echo $(pgrep gitea) > /var/run/gitea.pid
     return $?
@@ -15,7 +15,7 @@ start() {
 
 stop() {
     notify "Stopping gitea"
-    kill $(cat /var/run/gitea.pid)
+    kill $(cat /var/run/gitea.pid | awk '{print $2}')
     check $? "stop gitea"
     rm /var/run/gitea.pid &> /dev/null
     return $?

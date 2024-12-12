@@ -6,7 +6,7 @@
 #------------------------------------
 
 start() {
-    otify "Starting httpd"
+    notify "Starting httpd"
     /usr/bin/httpd -h /srv/www
     check $? "start httpd"
     echo $(pgrep httpd) > /var/run/httpd.pid
