@@ -7,7 +7,7 @@
 
 start() {
     otify "Starting gitea"
-    su gitea -c "/usr/bin/gitea -w /home/gitea"
+    su gitea -c "/usr/bin/gitea -w /home/gitea" &
     check $? "start gitea"
     echo $(pgrep gitea) > /var/run/gitea.pid
     return $?
